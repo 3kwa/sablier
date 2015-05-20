@@ -94,12 +94,20 @@ def disambiguate(timezone):
         raise AmbiguousTimezone('%s: use one of %s' % (timezone, candidates))
     return candidates[0]
 
-def On(date):
+def On(*args):
     """Date constructor"""
+    if not isinstance(args[0], datetime.date):
+        date = datetime.date(*args)
+    else:
+        date = args[0]
     return Sablier(date)
 
-def At(time):
+def At(*args):
     """Time constructor"""
+    if not isinstance(args[0], datetime.time):
+        time = datetime.time(*args)
+    else:
+        time = args[0]
     return Sablier(time=time)
 
 def In(timezone):
