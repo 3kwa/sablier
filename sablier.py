@@ -1,5 +1,5 @@
 """
-DSL to play with date, time and timezones
+Python API to play with date, time and timezones
 
 Say we want to find out what time it is in Sydney when it is 10 amd in Japan on
 the 20th of May 2015:
@@ -32,7 +32,7 @@ class Sablier(object):
     def On(self, date_or_year, month=None, day=None):
         """Chainable date setter"""
         if isinstance(date_or_year, datetime.date):
-            self.date = date
+            self.date = date_or_year
         else:
             if month is None:
                 raise TypeError('month required (pos 2)')
@@ -65,8 +65,8 @@ class Sablier(object):
             hour, minute, second = self.time.hour, self.time.minute, self.time.second
         except AttributeError:
             raise InvalidTime()
-        return self.timezone.localize(datetime.datetime(self.date.year, self.date.month, self.date.day,
-                                                        self.time.hour, self.time.minute, self.time.second))
+        return self.timezone.localize(datetime.datetime(year, month, day,
+                                                        hour, minute, second))
 
     def datetime_in(self, timezone):
         """Change timezone and return datetime.datetime"""
@@ -87,8 +87,7 @@ class Sablier(object):
 def disambiguate(timezone):
     """Disambiguates timezone string, raise AmbiguousTimezone"""
     if timezone not in pytz.all_timezones:
-        candidates = [candidate for candidate in pytz.all_timezones
-                                if timezone in candidate]
+        candidates = [candidate for candidate in pytz.all_timezones if timezone in candidate]
     else:
         candidates = [timezone]
     if len(candidates) > 1:
@@ -113,13 +112,17 @@ def Epoch(timestamp):
     return Sablier(date=dt.date(), time=dt.time(), timezone='UTC')
 
 class SablierError(Exception):
+    """Generic sablier exception"""
     pass
 
 class AmbiguousTimezone(SablierError):
+    """Raised when can't disambiguate and timezone string"""
     pass
 
 class InvalidDate(SablierError):
+    """Raised when date is not or improperly set"""
     pass
 
 class InvalidTime(SablierError):
+    """Raised when time is not or improperly set"""
     pass
