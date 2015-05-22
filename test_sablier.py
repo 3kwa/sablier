@@ -41,3 +41,24 @@ def test_on_at_in():
     assert s == sablier.Sablier(datetime.date(2015, 5, 21),
                                 datetime.time(11),
                                 'Europe/London')
+
+def test_sub_not_implemented():
+    s = sablier.On(2015, 4, 21).At(11).In('Sydney')
+    with pytest.raises(TypeError):
+        s - 1
+
+def test_sub_sablier():
+    a = sablier.On(2015, 5, 23).At(0, 15).In('Sydney')
+    b = sablier.On(2015, 5, 22).At(15, 15).In('Paris')
+    assert a - b == datetime.timedelta(0, 3600)
+
+def test_sub_timedelta():
+    a = sablier.On(2015, 5, 23).At(0, 15).In('Sydney')
+    d = datetime.timedelta(0, 3600)
+    assert a - d == sablier.On(2015, 5, 22).At(23, 15).In('Sydney')
+
+def test_add_timedelta():
+    a = sablier.On(2015, 5, 22).At(23, 15).In('Sydney')
+    d = datetime.timedelta(0, 7200)
+    assert a + d == sablier.On(2015, 5, 23).At(1, 15).In('Sydney')
+

@@ -95,6 +95,22 @@ class Sablier(object):
                     self.time == other.time,
                     self.timezone == other.timezone))
 
+    def __sub__(self, other):
+        if isinstance(other, Sablier):
+            return self.datetime - other.datetime_in(self.timezone.zone)
+        elif isinstance(other, datetime.timedelta):
+            dt = self.datetime - other
+            return Sablier(dt.date(), dt.time(), self.timezone.zone)
+        else:
+            return NotImplemented
+
+    def __add__(self, timedelta):
+        if isinstance(timedelta, datetime.timedelta):
+            dt = self.datetime + timedelta
+            return Sablier(dt.date(), dt.time(), self.timezone.zone)
+        else:
+            return NotImplemented
+
 def disambiguate(timezone):
     """Disambiguates timezone string, raise AmbiguousTimezone"""
     if timezone not in pytz.all_timezones:
