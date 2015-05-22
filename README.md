@@ -51,7 +51,7 @@ If no `In` is chained it is UTC. `sablier` does not do *naive*!
 -------------
 
     >>> On(2015, 5, 20).At(23).In('Moscow').datetime_in('Paris')
-    datetime.datetime(2015, 5, 21, 1, 0, tzinfo=<DstTzInfo 'Europe/Paris' CEST+2:00:00 DST>)
+    datetime.datetime(2015, 5, 20, 22, 0, tzinfo=<DstTzInfo 'Europe/Paris' CEST+2:00:00 DST>)
 
 Yep you can still get into the tzinfo dark art if you want.
 

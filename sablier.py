@@ -24,10 +24,10 @@ import pytz
 class Sablier(object):
     """Date, time and timezone for the rest of us."""
 
-    def __init__(self, date=None, time=datetime.time(0), timezone='UTC'):
+    def __init__(self, date=None, time=datetime.time(0), timezone=None):
         self.date = date
         self.time = time
-        self.timezone = pytz.timezone(disambiguate(timezone))
+        self.timezone = pytz.timezone(disambiguate(timezone)) if timezone else None
 
     def On(self, date_or_year, month=None, day=None):
         """Chainable date setter"""
@@ -51,8 +51,12 @@ class Sablier(object):
 
     def In(self, timezone):
         """Change timezone and return a new Sablier instance"""
-        dt = self.datetime_in(timezone)
-        return Sablier(dt.date(), dt.time(), timezone)
+        if self.timezone is None:
+            self.timezone = pytz.timezone(disambiguate(timezone))
+            return self
+        else:
+            dt = self.datetime_in(timezone)
+            return Sablier(dt.date(), dt.time(), timezone)
 
     @property
     def datetime(self):
@@ -70,6 +74,8 @@ class Sablier(object):
 
     def datetime_in(self, timezone):
         """Change timezone and return datetime.datetime"""
+        if self.timezone is None:
+            self.timezone = pytz.utc
         timezone = disambiguate(timezone)
         return self.datetime.astimezone(pytz.timezone(timezone))
 
@@ -83,6 +89,11 @@ class Sablier(object):
 
     def __repr__(self):
         return "Sablier(%r, %r, '%s')" % (self.date, self.time, self.timezone.zone)
+
+    def __eq__(self, other):
+        return all((self.date == other.date,
+                    self.time == other.time,
+                    self.timezone == other.timezone))
 
 def disambiguate(timezone):
     """Disambiguates timezone string, raise AmbiguousTimezone"""

@@ -29,3 +29,15 @@ def test_at_time():
 def test_on_date():
     s = sablier.At(13, 30).On(datetime.date(2015, 5, 20))
     assert s.date == datetime.date(2015, 5, 20)
+
+def test_in_on_at():
+    s = sablier.In('Sydney').On(2015, 5, 21).At(11)
+    assert s == sablier.Sablier(datetime.date(2015, 5, 21),
+                                datetime.time(11),
+                                'Australia/Sydney')
+
+def test_on_at_in():
+    s = sablier.On(2015, 5, 21).At(11).In('London')
+    assert s == sablier.Sablier(datetime.date(2015, 5, 21),
+                                datetime.time(11),
+                                'Europe/London')
