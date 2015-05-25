@@ -50,15 +50,14 @@ def test_sub_not_implemented():
 def test_sub_sablier():
     a = sablier.On(2015, 5, 23).At(0, 15).In('Sydney')
     b = sablier.On(2015, 5, 22).At(15, 15).In('Paris')
-    assert a - b == datetime.timedelta(0, 3600)
+    assert a - b == datetime.timedelta(hours=1)
 
 def test_sub_timedelta():
     a = sablier.On(2015, 5, 23).At(0, 15).In('Sydney')
-    d = datetime.timedelta(0, 3600)
+    d = datetime.timedelta(hours=1)
     assert a - d == sablier.On(2015, 5, 22).At(23, 15).In('Sydney')
 
 def test_add_timedelta():
     a = sablier.On(2015, 5, 22).At(23, 15).In('Sydney')
-    d = datetime.timedelta(0, 7200)
+    d = datetime.timedelta(hours=2)
     assert a + d == sablier.On(2015, 5, 23).At(1, 15).In('Sydney')
-
