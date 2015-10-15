@@ -1,7 +1,7 @@
 """
 Python API to play with date, time and timezones
 
-Say we want to find out what time it is in Sydney when it is 10 amd in Japan on
+Say we want to find out what time it is in Sydney when it is 10 am in Japan on
 the 20th of May 2015:
 
     >>> from sablier import In
@@ -127,6 +127,8 @@ def disambiguate(timezone):
         candidates = difflib.get_close_matches(timezone, pytz.all_timezones)
     if len(candidates) > 1:
         raise AmbiguousTimezone('%s: use one of %s' % (timezone, candidates))
+    if len(candidates) == 0:
+        raise UnknownTimezone(timezone)
     return candidates[0]
 
 def On(*args):
@@ -172,4 +174,8 @@ class InvalidDate(SablierError):
 
 class InvalidTime(SablierError):
     """Raised when time is not or improperly set"""
+    pass
+
+class UnknownTimezone(SablierError):
+    """Raised when we can't fuzzy match the timezone"""
     pass

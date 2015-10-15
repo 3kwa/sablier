@@ -3,7 +3,7 @@ from setuptools import setup
 
 setup(
     name = 'sablier',
-    version = '0.2.0',
+    version = '0.2.1',
     description = 'Python API to play with date, time and timezones',
     py_modules = ['sablier'],
     license = 'unlicense',

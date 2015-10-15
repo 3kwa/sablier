@@ -70,17 +70,26 @@ def test_repr_timezone_not_set():
     repr(sablier.On(2015, 10, 15))
 
 def test_on_no_args_today():
-    sablier.On().date == datetime.date.today()
+    assert sablier.On().date == datetime.date.today()
 
 def test_at_no_args_now():
-    sablier.At().time == datetime.datetime.now().time
+    assert almost_equal(sablier.At().time, datetime.datetime.now().time())
 
 def test_on_at_no_args():
     s = sablier.On().At()
-    s.date = datetime.date.today()
-    s.time = datetime.datetime.now().time
+    now = datetime.datetime.now()
+    assert s.date == now.date()
+    assert almost_equal(s.time, now.time())
 
 def test_at_on_no_args():
     s = sablier.At().On()
-    s.date = datetime.date.today()
-    s.time = datetime.datetime.now().time
+    assert s.date == datetime.date.today()
+    assert almost_equal(s.time, datetime.datetime.now().time())
+
+def test_no_match():
+    with pytest.raises(sablier.UnknownTimezone):
+        sablier.In('Sdney').On().At()
+
+def almost_equal(left, right):
+    """True when (hour, minute, second) equal"""
+    return (left.hour, left.minute, left.second) == (right.hour, right.minute, right.second)
