@@ -65,3 +65,6 @@ def test_add_timedelta():
 def test_fuzzy_matching_difflib_match():
     with pytest.raises(sablier.AmbiguousTimezone):
         sablier.disambiguate('HongKong')
+
+def test_repr_timezone_not_set():
+    repr(sablier.On(2015, 10, 15))

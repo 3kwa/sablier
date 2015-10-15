@@ -89,7 +89,8 @@ class Sablier(object):
         return self.datetime_in(timezone).time()
 
     def __repr__(self):
-        return "Sablier(%r, %r, '%s')" % (self.date, self.time, self.timezone.zone)
+        zone = self.timezone.zone if self.timezone else 'UTC'
+        return "Sablier(%r, %r, '%s')" % (self.date, self.time, zone)
 
     def __eq__(self, other):
         return all((self.date == other.date,
