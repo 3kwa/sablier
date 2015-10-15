@@ -30,9 +30,11 @@ class Sablier(object):
         self.time = time
         self.timezone = pytz.timezone(disambiguate(timezone)) if timezone else None
 
-    def On(self, date_or_year, month=None, day=None):
+    def On(self, date_or_year=None, month=None, day=None):
         """Chainable date setter"""
-        if isinstance(date_or_year, datetime.date):
+        if date_or_year is None:
+            self.date = datetime.date.today()
+        elif isinstance(date_or_year, datetime.date):
             self.date = date_or_year
         else:
             if month is None:
@@ -42,9 +44,11 @@ class Sablier(object):
             self.date = datetime.date(date_or_year, month, day)
         return self
 
-    def At(self, time_or_hour, minute=0, second=0):
+    def At(self, time_or_hour=None, minute=0, second=0):
         """Chainable time setter"""
-        if isinstance(time_or_hour, datetime.time):
+        if time_or_hour is None:
+            self.time = datetime.datetime.now().time()
+        elif isinstance(time_or_hour, datetime.time):
             self.time = time_or_hour
         else:
             self.time = datetime.time(time_or_hour, minute, second)
@@ -127,7 +131,9 @@ def disambiguate(timezone):
 
 def On(*args):
     """Date constructor"""
-    if not isinstance(args[0], datetime.date):
+    if len(args) == 0:
+        date = datetime.date.today()
+    elif not isinstance(args[0], datetime.date):
         date = datetime.date(*args)
     else:
         date = args[0]
@@ -135,7 +141,9 @@ def On(*args):
 
 def At(*args):
     """Time constructor"""
-    if not isinstance(args[0], datetime.time):
+    if len(args) == 0:
+        time = datetime.datetime.now().time()
+    elif not isinstance(args[0], datetime.time):
         time = datetime.time(*args)
     else:
         time = args[0]

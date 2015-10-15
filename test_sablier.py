@@ -68,3 +68,19 @@ def test_fuzzy_matching_difflib_match():
 
 def test_repr_timezone_not_set():
     repr(sablier.On(2015, 10, 15))
+
+def test_on_no_args_today():
+    sablier.On().date == datetime.date.today()
+
+def test_at_no_args_now():
+    sablier.At().time == datetime.datetime.now().time
+
+def test_on_at_no_args():
+    s = sablier.On().At()
+    s.date = datetime.date.today()
+    s.time = datetime.datetime.now().time
+
+def test_at_on_no_args():
+    s = sablier.At().On()
+    s.date = datetime.date.today()
+    s.time = datetime.datetime.now().time
