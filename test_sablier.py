@@ -61,3 +61,7 @@ def test_add_timedelta():
     a = sablier.On(2015, 5, 22).At(23, 15).In('Sydney')
     d = datetime.timedelta(hours=2)
     assert a + d == sablier.On(2015, 5, 23).At(1, 15).In('Sydney')
+
+def test_fuzzy_matching_difflib_match():
+    with pytest.raises(sablier.AmbiguousTimezone):
+        sablier.disambiguate('HongKong')

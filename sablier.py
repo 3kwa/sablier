@@ -17,6 +17,7 @@ date time in Paris:
 """
 
 import datetime
+import difflib
 
 import pytz
 
@@ -117,6 +118,8 @@ def disambiguate(timezone):
         candidates = [candidate for candidate in pytz.all_timezones if timezone in candidate]
     else:
         candidates = [timezone]
+    if len(candidates) == 0:
+        candidates = difflib.get_close_matches(timezone, pytz.all_timezones)
     if len(candidates) > 1:
         raise AmbiguousTimezone('%s: use one of %s' % (timezone, candidates))
     return candidates[0]
@@ -127,7 +130,7 @@ def On(*args):
         date = datetime.date(*args)
     else:
         date = args[0]
-    return Sablier(date)
+    return Sablier(date=date)
 
 def At(*args):
     """Time constructor"""
