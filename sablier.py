@@ -160,6 +160,10 @@ def Epoch(timestamp):
     dt = datetime.datetime.utcfromtimestamp(timestamp)
     return Sablier(date=dt.date(), time=dt.time(), timezone='UTC')
 
+def Datetime(datetime):
+    """Datetime constructor"""
+    return On(datetime.date()).At(datetime.time())
+
 class SablierError(Exception):
     """Generic sablier exception"""
     pass

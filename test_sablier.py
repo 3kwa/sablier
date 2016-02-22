@@ -90,6 +90,12 @@ def test_no_match():
     with pytest.raises(sablier.UnknownTimezone):
         sablier.In('Sdney').On().At()
 
+def test_from_datetime():
+    now =  datetime.datetime.now()
+    s = sablier.Datetime(now)
+    assert s.date == now.date()
+    assert s.time == now.time()
+
 def almost_equal(left, right):
     """True when (hour, minute, second) equal"""
     return (left.hour, left.minute, left.second) == (right.hour, right.minute, right.second)
